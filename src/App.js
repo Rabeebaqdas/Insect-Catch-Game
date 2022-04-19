@@ -5,54 +5,65 @@ import React,{useRef,useEffect,useState} from 'react';
 
 
 function App() {
+    const [response,setRes] = useState()
+    const [val,setVal] = useState('')
+    const [Loading,setLoading] = useState(false);
 
- 
     useEffect(()=>{
-    const codes = document.querySelectorAll('.code')
 
-
-codes[0]?.focus()
-
-codes.forEach((code, idx) => {
-    code.addEventListener('keydown', (e) => {
-        if (e.key >= 0 && e.key <= 9) {
-            codes[idx].value = ''
-            setTimeout(() => codes[idx + 1].focus(), 10)
-            if(idx == 5) {
-                idx = 0;
-            }
-        } else if (e.key === 'Backspace') {
-            setTimeout(() => codes[idx - 1].focus(), 10)
-            if(idx == 0) {
-                idx = 5;
-            }
+        const getData = async () =>{
+            setLoading(true)
+            const data = await fetch('https://randomuser.me/api?results=50');
+            const res = await data.json()
+            setRes(res.results)
+            setLoading(false)
+           
         }
-    })
-})
+        getData()
 
-},[])
+    },[])
 
+    const handleSearch = () => {
+        return response?.filter((res) =>
+                res.name.first.toLowerCase().includes(val.toLowerCase()) ||
+                res.location.city.toLowerCase().includes(val.toLowerCase()) ||
+                res.location.country.toLowerCase().includes(val.toLowerCase())
+
+
+        );
+    };
+  
   return (
     
     <div className="container">
-        <h2>Verify your Account</h2>
-        <p>
-            We emailed you the six digit code to cool_guy@gmail.com <br />Enter the code below to confirm your email address.
-        </p>
-        <div className="code-container">
-            
-        <input type="number" className="code" min="0" max="9" placeholder='0' required/>
-        <input type="number" className="code" min="0" max="9" placeholder='0' required/>
-        <input type="number" className="code" min="0" max="9" placeholder='0' required/>
-        <input type="number" className="code" min="0" max="9" placeholder='0' required/>
-        <input type="number" className="code" min="0" max="9" placeholder='0' required/>
-        <input type="number" className="code" min="0" max="9" placeholder='0' required/>
-        </div>
-        <small className="info">
-            This is design only. We didn't actually send
-            you an email as we don't have your email, right?
-        </small>
-    </div>
+       
+    <header className="header">
+        <h4 className="title">Live User Filter</h4>
+        <small className="subtitle">Search by name, city or country</small>
+        <input type="text" id="filter" placeholder="Search" value={val} onChange={(e)=>setVal(e.target.value)} />
+    </header>
+
+    <ul id="result" className="user-list">
+
+        { Loading ?
+         <li>
+         <h3>Loading...</h3>
+     </li>
+     :
+            handleSearch()?.map((e)=>(
+                <li>
+                    <img src={e.picture.large} alt="img"></img>
+                    <div className='user-info'>
+                            <h4>{e?.name?.first} {e?.name?.last}</h4>
+                            <p>{e?.location?.city}, {e?.location?.country}</p>
+    
+                    </div>
+                </li>
+            )) 
+        }
+        
+    </ul>
+</div>
 
   )
 }
