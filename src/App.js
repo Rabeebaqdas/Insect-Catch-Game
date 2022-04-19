@@ -5,66 +5,64 @@ import React,{useRef,useEffect,useState} from 'react';
 
 
 function App() {
-    const [response,setRes] = useState()
-    const [val,setVal] = useState('')
-    const [Loading,setLoading] = useState(false);
+
 
     useEffect(()=>{
+const ratings = document.querySelectorAll('.rating')
+const ratingsContainer = document.querySelector('.ratings-container')
+const sendBtn = document.querySelector('#send')
+const panel = document.querySelector('#panel')
+let selectedRating = 'Satisfied'
 
-        const getData = async () =>{
-            setLoading(true)
-            const data = await fetch('https://randomuser.me/api?results=50');
-            const res = await data.json()
-            setRes(res.results)
-            setLoading(false)
-           
-        }
-        getData()
+ratingsContainer.addEventListener('click', (e) => {
+    if (e.target.parentNode.classList.contains('rating')) {
+        removeActive()
+        e.target.parentNode.classList.add('active')
+        selectedRating = e.target.nextElementSibling.innerHTML
+    }
+})
+
+sendBtn.addEventListener('click', (e) => {
+    panel.innerHTML = `
+    <i class="fas fa-heart"></i>
+    <strong>Thank You!</strong>
+    <br>
+    <strong>Feedback: ${selectedRating}</strong>
+    <p>We'll use your feedback to improve our customer support</p>
+    `
+})
+
+function removeActive() {
+    for (let i = 0; i < ratings.length; i++) {
+        ratings[i].classList.remove('active')
+    }
+}
 
     },[])
-
-    const handleSearch = () => {
-        return response?.filter((res) =>
-                res.name.first.toLowerCase().includes(val.toLowerCase()) ||
-                res.location.city.toLowerCase().includes(val.toLowerCase()) ||
-                res.location.country.toLowerCase().includes(val.toLowerCase())
-
-
-        );
-    };
   
   return (
     
-    <div className="container">
-       
-    <header className="header">
-        <h4 className="title">Live User Filter</h4>
-        <small className="subtitle">Search by name, city or country</small>
-        <input type="text" id="filter" placeholder="Search" value={val} onChange={(e)=>setVal(e.target.value)} />
-    </header>
+    <div id="panel" className="panel-container">
+    <strong>How satisfied are you with our <br />
+        customer support performance?</strong>
+    <div className="ratings-container">
+    <div className="rating">
+            <img src="https://cdn-icons.flaticon.com/png/512/1791/premium/1791429.png?token=exp=1650359716~hmac=754b9095022958af781f36e16794e60d" alt="" />
+            <small>Unhappy</small>
+        </div>
 
-    <ul id="result" className="user-list">
+        <div className="rating">
+            <img src="https://cdn-icons.flaticon.com/png/512/1791/premium/1791385.png?token=exp=1650357917~hmac=2a25734ec66aa210408791c720ee458d" alt="" />
+            <small>Neutral</small>
+        </div>
 
-        { Loading ?
-         <li>
-         <h3>Loading...</h3>
-     </li>
-     :
-            handleSearch()?.map((e)=>(
-                <li>
-                    <img src={e.picture.large} alt="img"></img>
-                    <div className='user-info'>
-                            <h4>{e?.name?.first} {e?.name?.last}</h4>
-                            <p>{e?.location?.city}, {e?.location?.country}</p>
-    
-                    </div>
-                </li>
-            )) 
-        }
-        
-    </ul>
+        <div className="rating active">
+            <img src="https://cdn-icons.flaticon.com/png/512/166/premium/166538.png?token=exp=1650357966~hmac=fce48b3170ade82b109fa2bc975040f5" alt="" />
+            <small>Satisfied</small>
+        </div>
+    </div>
+    <button className="btn" id="send">Send Review</button>
 </div>
-
   )
 }
 
