@@ -6,37 +6,54 @@ import React,{useRef,useEffect,useState} from 'react';
 
 function App() {
 
-    const [count,setCount] = useState(false)
+ 
     useEffect(()=>{
-        const boxesContainer = document.getElementById('boxes')
+    const codes = document.querySelectorAll('.code')
 
-    
-        function createBoxes() {
-            for (let i = 0; i < 4; i++) {
-                for (let j = 0; j < 4; j++) {
-                    const box = document.createElement('div')
-                    box.classList.add('box')
-                    box.style.backgroundPosition = `${-j * 125}px ${-i * 125}px`
-                    boxesContainer.appendChild(box)
-                }
+
+codes[0]?.focus()
+
+codes.forEach((code, idx) => {
+    code.addEventListener('keydown', (e) => {
+        if (e.key >= 0 && e.key <= 9) {
+            codes[idx].value = ''
+            setTimeout(() => codes[idx + 1].focus(), 10)
+            if(idx == 5) {
+                idx = 0;
+            }
+        } else if (e.key === 'Backspace') {
+            setTimeout(() => codes[idx - 1].focus(), 10)
+            if(idx == 0) {
+                idx = 5;
             }
         }
-        
-        createBoxes()
+    })
+})
 
-    },[])
-
-    const handleChange = () => {
-        setCount(!count);
-    }
-
+},[])
 
   return (
-    <>
-    <button className="magic" id="btn" onClick={handleChange}>Magic 🎩</button>
-    <div className={`boxes ${count ? "big" : '' }`} id="boxes"></div>
+    
+    <div className="container">
+        <h2>Verify your Account</h2>
+        <p>
+            We emailed you the six digit code to cool_guy@gmail.com <br />Enter the code below to confirm your email address.
+        </p>
+        <div className="code-container">
+            
+        <input type="number" className="code" min="0" max="9" placeholder='0' required/>
+        <input type="number" className="code" min="0" max="9" placeholder='0' required/>
+        <input type="number" className="code" min="0" max="9" placeholder='0' required/>
+        <input type="number" className="code" min="0" max="9" placeholder='0' required/>
+        <input type="number" className="code" min="0" max="9" placeholder='0' required/>
+        <input type="number" className="code" min="0" max="9" placeholder='0' required/>
+        </div>
+        <small className="info">
+            This is design only. We didn't actually send
+            you an email as we don't have your email, right?
+        </small>
+    </div>
 
-    </>
   )
 }
 
