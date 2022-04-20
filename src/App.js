@@ -6,38 +6,54 @@ import React,{useRef,useEffect,useState} from 'react';
 
 function App() {
 
-    const range = useRef(null) 
-
- useEffect(()=>{
-
-    range.current.addEventListener('input', (e) => {
-        const value = e.target.value
-        const label = e.target.nextElementSibling
-        const range_width = getComputedStyle(e.target).getPropertyValue('width')
-        const label_width = getComputedStyle(label).getPropertyValue('width')
-        const num_width = +range_width.substring(0, range_width.length - 2)
-        const num_label_width = +label_width.substring(0, label_width.length - 2)
-        const max = +e.target.max
-        const min = +e.target.min
-        const left = value * (num_width / max) - num_label_width / 2 + scale(value, min, max, 10, -10)
+    const [count,setCount] = useState(false);
+    const open = () => {
     
-        label.style.left = `${left}px`
-    
-        label.innerHTML = value
-    })
-    
-    const scale = (num, in_min, in_max, out_min, out_max) => {
-        return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+        setCount(true);
+ 
     }
- },[])
+    const close = () => {
+     
+        setCount(false);
+    }
+
+
+
   return (
     <>
-            <h2>Custom Range Slider</h2>
-    <div className="range-container">
-        <input type="range" id="range" min="0" max="100" ref={range} />
-        <label for="range">50</label>
+    <button className="nav-btn open-btn"  onClick={open}>
+        <i className="fas fa-bars"></i>
+    </button>
+    <img src="https://www.freepnglogos.com/uploads/netflix-logo-0.png"  className='logo' />
+    <p className="text">Mobile Navigation</p>
+
+    <div className={`nav nav-black ${count ? "visible" : ""}`}>
+        <div className={`nav nav-red ${count ? "visible" : ""}`}>
+            <div className={`nav nav-white ${count ? "visible" : ""}`}>
+                <button className="nav-btn close-btn">
+                    <i className="fas fa-times" onClick={close}></i>
+                </button>
+                <img src="https://www.freepnglogos.com/uploads/netflix-logo-0.png"  className='logo' />
+                <ul className="list">
+                    
+                <li><a href="#">Teams</a></li>
+                <li><a href="#">Locations</a></li>
+                <li><a href="#">Life at Netflix</a></li>
+                <li>
+                    <ul>
+                        <li><a href="#">Netflix culture memo </a></li>
+                        <li><a href="#">Work life balance </a></li>
+                        <li><a href="#">Inclusion & diversity </a></li>
+                        <li><a href="#">Blog</a></li>
+                        
+                    </ul>
+                </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    </>
+    
+</>
   )
 }
 
