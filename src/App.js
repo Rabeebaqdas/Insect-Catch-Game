@@ -6,63 +6,38 @@ import React,{useRef,useEffect,useState} from 'react';
 
 function App() {
 
+    const range = useRef(null) 
 
-    useEffect(()=>{
-const ratings = document.querySelectorAll('.rating')
-const ratingsContainer = document.querySelector('.ratings-container')
-const sendBtn = document.querySelector('#send')
-const panel = document.querySelector('#panel')
-let selectedRating = 'Satisfied'
+ useEffect(()=>{
 
-ratingsContainer.addEventListener('click', (e) => {
-    if (e.target.parentNode.classList.contains('rating')) {
-        removeActive()
-        e.target.parentNode.classList.add('active')
-        selectedRating = e.target.nextElementSibling.innerHTML
-    }
-})
-
-sendBtn.addEventListener('click', (e) => {
-    panel.innerHTML = `
-    <i class="fas fa-heart"></i>
-    <strong>Thank You!</strong>
-    <br>
-    <strong>Feedback: ${selectedRating}</strong>
-    <p>We'll use your feedback to improve our customer support</p>
-    `
-})
-
-function removeActive() {
-    for (let i = 0; i < ratings.length; i++) {
-        ratings[i].classList.remove('active')
-    }
-}
-
-    },[])
-  
-  return (
+    range.current.addEventListener('input', (e) => {
+        const value = e.target.value
+        const label = e.target.nextElementSibling
+        const range_width = getComputedStyle(e.target).getPropertyValue('width')
+        const label_width = getComputedStyle(label).getPropertyValue('width')
+        const num_width = +range_width.substring(0, range_width.length - 2)
+        const num_label_width = +label_width.substring(0, label_width.length - 2)
+        const max = +e.target.max
+        const min = +e.target.min
+        const left = value * (num_width / max) - num_label_width / 2 + scale(value, min, max, 10, -10)
     
-    <div id="panel" className="panel-container">
-    <strong>How satisfied are you with our <br />
-        customer support performance?</strong>
-    <div className="ratings-container">
-    <div className="rating">
-            <img src="https://cdn-icons.flaticon.com/png/512/1791/premium/1791429.png?token=exp=1650359716~hmac=754b9095022958af781f36e16794e60d" alt="" />
-            <small>Unhappy</small>
-        </div>
-
-        <div className="rating">
-            <img src="https://cdn-icons.flaticon.com/png/512/1791/premium/1791385.png?token=exp=1650357917~hmac=2a25734ec66aa210408791c720ee458d" alt="" />
-            <small>Neutral</small>
-        </div>
-
-        <div className="rating active">
-            <img src="https://cdn-icons.flaticon.com/png/512/166/premium/166538.png?token=exp=1650357966~hmac=fce48b3170ade82b109fa2bc975040f5" alt="" />
-            <small>Satisfied</small>
-        </div>
+        label.style.left = `${left}px`
+    
+        label.innerHTML = value
+    })
+    
+    const scale = (num, in_min, in_max, out_min, out_max) => {
+        return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+ },[])
+  return (
+    <>
+            <h2>Custom Range Slider</h2>
+    <div className="range-container">
+        <input type="range" id="range" min="0" max="100" ref={range} />
+        <label for="range">50</label>
     </div>
-    <button className="btn" id="send">Send Review</button>
-</div>
+    </>
   )
 }
 
