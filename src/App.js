@@ -1,154 +1,105 @@
 import './App.css';
-import React,{useRef,useEffect,useState} from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 
 
 
 function App() {
-    
-   
-    const a = useRef(null)
-    const b = useRef (null)
-    const c = useRef (null)
-    const d= useRef (null)
-    const quiz = useRef(null)
-    const question = useRef (null)
-    const submit = useRef(null)
-    const answer = useRef(null)
-    
-    let score = 0;
-    let currentQuiz = 0;
+    const testimonial = useRef(null)
+    const userImage = useRef(null)
+    const username = useRef(null)
+    const role = useRef(null)
 
-    const quizData = [
+
+    const testimonials = [
         {
-            question: "which language runs in a web browser?",
-            a: "java",
-            b: "c",
-            c: "python",
-            d:"javascript",
-            correct: "d",
+            name: 'Miyah Myles',
+            position: 'Marketing',
+            photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=707b9c33066bf8808c934c8ab394dff6',
+            text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem repellendus inventore hic quo ipsum nihil.Incidunt qui ipsum quisquam sequi maxime architecto similique reiciendis quidem facilis corporis libero nam nemo ratione id necessitatibus ab debitis nulla harum.Optio corrupti dolorum debitis incidunt est architecto voluptas aut nobis amet corporis accusamus.'
         },
         {
-            question: "what does css stand for?",
-            a: "central style shetts",
-            b: "cascading style sheets",
-            c:"cars suvs sailboats",
-            d:"cascading simple sheets",
-            correct: "b"
+            name: 'June Cha',
+            position: 'Softwere Engr',
+            photo: 'https://randomuser.me/api/portraits/women/44.jpg',
+            text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem repellendus inventore hic quo ipsum nihil.Incidunt qui ipsum quisquam sequi maxime architecto similique reiciendis quidem facilis corporis libero nam nemo ratione id necessitatibus ab debitis nulla harum.Optio corrupti dolorum debitis incidunt est architecto voluptas aut nobis amet corporis accusamus.'
         },
         {
-            question: "what does Html stand for?",
-            a: "central style shetts",
-            b: "cascading style sheets",
-            c:"Hypertext markup language",
-            d:"helicopters terminals motorboats lamborginis",
-            correct: "c"
+            name: 'Iida Niskanen',
+            position: 'Data Entry',
+            photo: 'https://randomuser.me/api/portraits/women/68.jpg',
+            text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem repellendus inventore hic quo ipsum nihil.Incidunt qui ipsum quisquam sequi maxime architecto similique reiciendis quidem facilis corporis libero nam nemo ratione id necessitatibus ab debitis nulla harum.Optio corrupti dolorum debitis incidunt est architecto voluptas aut nobis amet corporis accusamus.'
         },
         {
-            question: "what was the year when javascript launched?",
-            a: "1996",
-            b: "1995",
-            c:"1994",
-            d:"none of the above",
-            correct: "b"  
+            name: 'Jhonathan Nunfiez',
+            position: 'Graphic Designer',
+            photo: 'https://randomuser.me/api/portraits/women/43.jpg',
+            text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem repellendus inventore hic quo ipsum nihil.Incidunt qui ipsum quisquam sequi maxime architecto similique reiciendis quidem facilis corporis libero nam nemo ratione id necessitatibus ab debitis nulla harum.Optio corrupti dolorum debitis incidunt est architecto voluptas aut nobis amet corporis accusamus.'
+        },
+        {
+            name: 'Sasha Ho',
+            position: 'Accountant',
+            photo: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?h=350&auto=compress&cs=tinysrgb',
+            text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem repellendus inventore hic quo ipsum nihil.Incidunt qui ipsum quisquam sequi maxime architecto similique reiciendis quidem facilis corporis libero nam nemo ratione id necessitatibus ab debitis nulla harum.Optio corrupti dolorum debitis incidunt est architecto voluptas aut nobis amet corporis accusamus.'
+        },
+        {
+            name: 'Veeti Seppanen',
+            position: 'Director',
+            photo: 'https://randomuser.me/api/portraits/men/97.jpg',
+            text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem repellendus inventore hic quo ipsum nihil.Incidunt qui ipsum quisquam sequi maxime architecto similique reiciendis quidem facilis corporis libero nam nemo ratione id necessitatibus ab debitis nulla harum.Optio corrupti dolorum debitis incidunt est architecto voluptas aut nobis amet corporis accusamus.'
         }
-    
     ]
 
-    useEffect(()=>{
-        loadQuiz()
-    },[])
+    let idx = 0
 
+    useEffect(() => {
 
-    const loadQuiz = ()=>{
-        deselectAnswers()
-        const currentQuizData = quizData[currentQuiz];
-        question.current.innerText = currentQuizData.question;
-        a.current.innerText=currentQuizData.a
-        b.current.innerText=currentQuizData.b;
-        c.current.innerText=currentQuizData.c;
-        d.current.innerText=currentQuizData.d;
+        const  upadteTestimonial = () => {
 
+            const { name, position, photo, text } = testimonials[idx]
 
-    }
-    const deselectAnswers=()=>{
-        let answerEle = document.querySelectorAll('.answer')
-        answerEle.forEach((element)=>{
-            element.checked = false;
-        })
-      
-    }
+            testimonial.current.innerHTML = text
+            userImage.current.src = photo
+            username.current.innerHTML = name
+            role.current.innerHTML = position
 
+            idx++
 
-   
-
-    const getSelected = () =>{
-        let answer;
-        let answerEle = document.querySelectorAll('.answer')
-        
-        answerEle.forEach((answerEle)=>{
-            if(answerEle.checked){
-                answer=answerEle.id;
-            }
-        })
-        return answer;
-    }
-
-    const handleChange = () =>{
-        const answer = getSelected();
-
-        if(answer){
-            if(answer===quizData[currentQuiz].correct){
-                score++;
-            }
-            currentQuiz++;
-            if(currentQuiz < quizData.length){
-                loadQuiz()
-            }
-            else{
-                quiz.current.innerHTML = `<h2>You answered  ${score} / ${quizData.length}
-                questions corretly</h2> 
-                <button onClick='location.reload()'>Reload</button>
-                `
+            if (idx > testimonials.length - 1) {
+                idx = 0
             }
         }
 
-    }
-  return (
+        setInterval(upadteTestimonial, 10000)
 
-        <div className="quiz-container" id="quiz"  ref={quiz}>
-            <div className="quiz-header">
-                <h2 id="question" ref={question}>Question text</h2>
-                <ul>
-                    <li>
-                        <input type="radio" name="answer" id="a" 
-                        className='answer' ref={answer}/>
-                        <label htmlFor="a" id='a_text' ref={a}>Question</label>
-                    </li>
 
-                    <li>
-                        <input type="radio" name="answer" id="b" 
-                        className='answer' ref={answer}/>
-                        <label htmlFor="b" id='b_text' ref={b}>Question</label>
-                    </li>
+    }, [idx])
 
-                    <li>
-                        <input type="radio" name="answer" id="c"
-                        className='answer' ref={answer}/>
-                        <label htmlFor="c" id='c_text' ref={c}>Question</label>
-                    </li>
 
-                    <li>
-                        <input type="radio" name="answer" id="d"
-                        className='answer' ref={answer}/>
-                        <label htmlFor="d" id='d_text' ref={d}>Question</label>
-                    </li>
-                </ul>
+
+    return (
+
+        <div className="testimonial-container">
+            <div className="progress-bar"></div>
+            <div className="fas fa-quote-right fa-quote"></div>
+            <div className="fas fa-quote-left fa-quote"></div>
+            <p className="testimonial" ref={testimonial}>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem repellendus inventore hic quo ipsum nihil.
+                Incidunt qui ipsum quisquam sequi maxime architecto similique reiciendis quidem facilis corporis libero nam
+                nemo ratione id, necessitatibus ab debitis nulla harum. Optio corrupti dolorum debitis incidunt est
+                architecto voluptas aut, nobis amet corporis accusamus.
+            </p>
+            <div className="user">
+                <img src="https://randomuser.me/api/portraits/women/46.jpg" alt="user" className="user-image" ref={userImage} />
+                <div className="user-details">
+                    <h4 className="username" ref={username} >Eva Adams</h4>
+                    <p className="role" ref={role} >Blockchain Developer</p>
+                </div>
             </div>
-            <button id='submit' ref={submit} onClick={handleChange}>Submit</button>
         </div>
- 
-  )
+
+
+    )
 }
 
 export default App;
